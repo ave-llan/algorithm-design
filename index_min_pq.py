@@ -37,10 +37,18 @@ class IndexMinPQ (object):
         elif p > previous_p:
             self.__sink(i)
 
+    def priority(self, x):
+        return self.__keys[x]
+
     @property
     def min(self):
         """Get the current min."""
         return self.__h[1]
+
+    @property
+    def min_key(self):
+        return self.__keys[self.min]
+    
 
     @property
     def count(self):
