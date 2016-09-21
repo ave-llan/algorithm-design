@@ -31,6 +31,10 @@ class Heap (object):
         """Get the number of items in the heap."""
         return len(self.__h) - 1
 
+    @property
+    def is_empty(self):
+        return self.count == 0
+
     def __swim(self, k):
         """Move the value at index k up until heap order is restored."""
         while k  > 1 and self.__is_less(k, k / 2):
@@ -61,10 +65,12 @@ def unit_tests():
     """Small battery of unit tests."""
     m = Heap()
     assert m.count == 0
+    assert m.is_empty
 
     m.insert(5)
     assert m.top == 5
     assert m.count == 1
+    assert not m.is_empty
 
     m.insert(7)
     assert m.top == 5
