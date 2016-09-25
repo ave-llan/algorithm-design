@@ -1,7 +1,7 @@
 """Implementation of an abstract heap which takes a comparator function."""
 
 class Heap (object):
-    """Standard top heap that offers remove_top and insert."""
+    """Standard heap that offers remove_top and insert."""
 
     def __init__(self, isOrderedBefore=lambda a, b: a < b, nums=None):
         self.__isOrderedBefore = isOrderedBefore
