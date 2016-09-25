@@ -15,6 +15,7 @@ class SegmentTree(object):
             return self.__str__()
 
     def __init__(self, nums):
+        if not len(nums): return
         head = self.TreeNode((0, len(nums) - 1), 0)
         self.tree = [None, head]   # 1-based binary tree
         i = 1
@@ -72,6 +73,10 @@ class SegmentTree(object):
                     self.__sum_in_range((mid + 1, target_end), k * 2 + 1))
 
 def unit_test():
+    t = SegmentTree([])
+    t = SegmentTree([44])
+    assert t.sum_in_range(0, 0) == 44
+
     nums = [8, 1, 7, 5, 2, 3, 1, 0, 12, 3]
     t = SegmentTree(nums)
     for i, thing in enumerate(t.tree):
@@ -97,8 +102,6 @@ def unit_test():
         t.update_val(i, num)
         assert t.sum_in_range(i, i) == num
         assert t.sum_in_range(0, len(nums) - 1) == sum(nums)
-
-    
 
     return "unit_tests pass"
 
