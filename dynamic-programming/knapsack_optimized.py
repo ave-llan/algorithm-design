@@ -1,3 +1,7 @@
+"""Knapsack algorithm optimized to find only the max value and not list of used items.
+    Uses two table rows.
+"""
+
 class Knapsack(object):
     def __init__(self, items, capacity):
         """
@@ -6,59 +10,38 @@ class Knapsack(object):
         """
         self.items = items
         self.capacity = capacity
-        self.__d = self.__optimize(items, capacity)
-        self.__used = self.reconstruct(items, self.__d)
+        self.__max_value = self.__optimize(items, capacity)
 
     def __optimize(self, items, capacity):
-        d = [[0] * (capacity + 1)]
+        items_remaining = len(items)
+        prev = [0] * (capacity + 1)
         for weight, value in items:
-            row = []
-            for x in range(capacity + 1):
-                if weight > x:
-                    row.append(d[-1][x])
-                else:
-                    row.append(max(d[-1][x], d[-1][x - weight] + value))
-            d.append(row)
-        return d
-
-    def reconstruct(self, items, d):
-        x = len(d[0]) - 1
-        used = []
-        for i, item in reversed(zip(range(1, len(d)), items)):
-            if d[i - 1][x] < d[i][x]:
-                used.append(item)
-                x -= item[0]
-        return used
+            print(items_remaining)
+            items_remaining -= 1
+            prev = prev[:weight] + [max(prev[x], prev[x - weight] + value) 
+                                    for x in range(weight, capacity + 1)]
+        return prev[-1]
 
     @property
     def max_value(self):
-        return self.__d[-1][-1]
-
-    @property
-    def used(self):
-        return self.__used
+        return self.__max_value
 
 
 def unit_test():
     k = Knapsack([], 10)
     assert k.max_value == 0
-    assert k.used == []
 
     k = Knapsack([(5, 8)], 0)
     assert k.max_value == 0
-    assert k.used == []
 
     k = Knapsack([(5, 8)], 10)
     assert k.max_value == 8
-    assert k.used == [(5, 8)]
 
     k = Knapsack([(2, 3), (2, 2), (7, 5), (9, 2)], 10)
     assert k.max_value == 8
-    assert sorted(k.used) == sorted([(2, 3), (7, 5)])
 
     k = Knapsack([(2, 3), (8, 7), (2, 2), (7, 5), (9, 2)], 10)
     assert k.max_value == 10
-    assert sorted(k.used) == sorted([(2, 3), (8, 7)])
 
     return "unit_test pass"
 
@@ -72,5 +55,7 @@ def solve_from_file(filepath):
 
 if __name__ == "__main__":
     import sys
-    print(unit_test())
-    solve_from_file(sys.argv[1])
+    if len(sys.argv) == 1:
+        print(unit_test())
+    if len(sys.argv) == 2:
+        solve_from_file(sys.argv[1])
